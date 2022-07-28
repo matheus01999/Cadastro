@@ -4,7 +4,7 @@ var fs = require('fs');
 const { response } = require('../app');
 var router = express.Router();
 var pessoas = []
-const caminhoBanco = "C:/temp/banco.js"
+const caminhoBanco = 'dados/banco.js'
 
 
 
@@ -16,6 +16,26 @@ router.get('/', function(request, response, next) {
       dados['pessoas'] = []
     }else{
       dados['pessoas'] = JSON.parse(data)
+    }
+    response.render('index', dados)
+  })
+});
+
+router.get('/pesquisar', function(request, response, next) {  
+  dados = {title: 'Pesquisar'}
+  carregarBase(function read(err, data){
+    if (err) {
+      console.log(err)
+      bancoDados['pessoas'] = []
+    }else{
+      var dadosPesquisados = []
+      var bancoDados = JSON.parse(data)
+      for(var i=0; i<bancoDados.length; i++){
+        if(request.query.nome = bancoDados[i].nome){
+          dadosPesquisados.push(bancoDados[i])
+        }
+      }
+      dados['pessoas'] = dadosPesquisados
     }
     response.render('index', dados)
   })

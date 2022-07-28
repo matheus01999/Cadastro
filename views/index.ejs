@@ -38,6 +38,20 @@
 				</div>
 			</form>
 		</fieldset>
+
+    <fieldset id="formCadastro">
+			<legend>Cadastro de pessoas</legend>
+			<form action="/pesquisar" method="get">
+				<div>
+					<label for="nome">Nome: </label>
+					<input type="text" name="nome" id="nome" /> 
+				<div>
+					<input type="submit" value="buscar" /> 
+				</div>
+			</form>
+		</fieldset>
+
+
 		<input type="button" value="Formulário de cadastro" id="mostrarForm" onclick="mostrarFormulario()" style="display:none" /> 
 		<fieldset>
 			<legend>Pessoas cadastradas</legend>
