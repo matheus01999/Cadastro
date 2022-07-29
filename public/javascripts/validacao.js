@@ -15,3 +15,9 @@ function validacao(){
 	}
 
 }
+
+var excluirDados = function(cpf){
+	if(confirm("Deseja realmente excluir ?")){
+		window.location.href = '/excluir?cpf=' + cpf
+	}
+}

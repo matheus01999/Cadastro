@@ -22,6 +22,24 @@ router.get('/', function(request, response, next) {
   })
 });
 
+//Rota de exclusão
+router.get('/excluir', function(request, response, next) {  
+  dados = {title: 'Home'}
+  carregarBase(function read(err, data){
+    if (err) {
+      console.log(err)
+      dados['pessoas'] = []
+    }else{
+      dados['pessoas'] = JSON.parse(data)
+    }
+    response.render('index', dados)
+  })
+});
+
+
+
+
+// Rota de Pesquisa
 router.get('/pesquisar', function(request, response, next) {  
   dados = {title: 'Pesquisar'}
   carregarBase(function read(err, data){
@@ -62,6 +80,7 @@ router.get('/pesquisar', function(request, response, next) {
 });
 
 
+// Rota de cadastro
 
 router.post('/cadastrar-pessoas', function(request, response, next) {
   carregarBase(function read(err, data){
