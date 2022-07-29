@@ -1,3 +1,4 @@
+const { FORMERR } = require('dns');
 const { json } = require('express');
 var express = require('express');
 var fs = require('fs');
@@ -29,12 +30,31 @@ router.get('/pesquisar', function(request, response, next) {
       bancoDados['pessoas'] = []
     }else{
       var dadosPesquisados = []
-      var bancoDados = JSON.parse(data)
-      for(var i=0; i<bancoDados.length; i++){
-        if(request.query.nome == bancoDados[i].nome){
-          dadosPesquisados.push(bancoDados[i])
-        }
+      if(request.query.nome == ""){
+        var dadosPesquisados = JSON.parse(data)
       }
+      else{
+        var bancoDados = JSON.parse(data)
+
+        /* PESQUISA COM REGULAR EXPRE */
+        for(var i=0; i<bancoDados.length; i++){
+          var reg = new RegExp(request.query.nome, 'i')
+          if(bancoDados[i].nome.match(reg) != null){
+            dadosPesquisados.push(bancoDados[i])
+          }
+        }
+
+        /* PESQUISA SEM UTILIZAR REGULAR EXPRESION
+        for(var i=0; i<bancoDados.length; i++){
+          var nomeMinusculo = request.query.nome.toLocaleLowerCase();
+          var nomeBancoMinusculo = bancoDados[i].nome.toLocaleLowerCase();
+          if(nomeBancoMinusculo.indexOf(nomeMinusculo) != -1){
+            dadosPesquisados.push(bancoDados[i])
+          }
+        }
+        */
+      }
+      
       dados['pessoas'] = dadosPesquisados
     }
     response.render('index', dados)
