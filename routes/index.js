@@ -31,7 +31,7 @@ router.get('/pesquisar', function(request, response, next) {
       var dadosPesquisados = []
       var bancoDados = JSON.parse(data)
       for(var i=0; i<bancoDados.length; i++){
-        if(request.query.nome = bancoDados[i].nome){
+        if(request.query.nome == bancoDados[i].nome){
           dadosPesquisados.push(bancoDados[i])
         }
       }
