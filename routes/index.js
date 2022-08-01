@@ -5,7 +5,7 @@ var fs = require('fs');
 const { response } = require('../app');
 var router = express.Router();
 var pessoas = []
-const caminhoBanco = 'dados/banco.js'
+var caminhoBanco = 'dados/banco.js'
 
 
 
@@ -30,7 +30,15 @@ router.get('/excluir', function(request, response, next) {
       console.log(err)
       dados['pessoas'] = []
     }else{
-      dados['pessoas'] = JSON.parse(data)
+      var bancoDados = JSON.parse(data)
+      var novosDados = []
+      for(var i=0; i<bancoDados.length; i++){
+        if(bancoDados[i].cpf != request.query.cpf ){
+          novosDados.push(bancoDados[i])
+        }
+      }
+      atualizarBase(novosDados)
+      dados['pessoas'] = novosDados
     }
     response.render('index', dados)
   })
@@ -116,12 +124,18 @@ var carregarBase = function(callback){
 
 var salvarBase = function(hash){
   pessoas.push(hash)
-  fs.writeFile(caminhoBanco, JSON.stringify(pessoas), function(err){
-    if (err){
+  atualizarBase(pessoas)
+}
+
+
+
+var atualizarBase = function(array){
+  var fs = require('fs');
+  fs.writeFile(caminhoBanco, JSON.stringify(array), function(err){
+    if(err){
       console.log(err)
     }
   })
 }
-
 
 module.exports = router;
