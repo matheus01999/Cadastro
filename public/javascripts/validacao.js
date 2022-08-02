@@ -18,6 +18,6 @@ var validacao = function(){
 
 var excluirDados = function(cpf){
 	if(confirm("Deseja realmente excluir ?")){
-		window.location.href = '/excluir?cpf' + cpf;
+		window.location.href = '/excluir?cpf=' + cpf;
 	}
 }
