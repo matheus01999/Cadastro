@@ -1,6 +1,7 @@
 var validacao = function(){
 	var nome = $("#nome").val()
 	var cpf = $("#cpf").val()
+
 	// primeiro tipo de validação
 	if(nome == ""){
 		alert("Por favor digite seu nome")
