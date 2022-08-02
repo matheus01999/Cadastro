@@ -21,3 +21,9 @@ var excluirDados = function(cpf){
 		window.location.href = '/excluir?cpf=' + cpf;
 	}
 }
+
+var alterarDados = function(cpf){
+	if(confirm("Deseja realizar a alteração dos Dados ?")){
+		window.location.href = '/alterar?cpf=' + cpf
+	}
+}

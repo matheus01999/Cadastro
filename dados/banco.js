@@ -1,1 +1,1 @@
-[{"nome":"Matheus","sobrenome":"Rocha","cpf":"254.879.514-58","telefone":"40028922","endereco":"R. Silvestre Palma 165C"},{"nome":"Arthur","sobrenome":"Rocha","cpf":"6579616.465","telefone":"54512122","endereco":"R. Silvestre Palma 165C"}]
+[{"nome":"Arthur","sobrenome":"Rocha","cpf":"6579616.465","telefone":"54512122","endereco":"R. Silvestre Palma 165C"}]
