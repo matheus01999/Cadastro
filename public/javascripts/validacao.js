@@ -1,19 +1,20 @@
 var validacao = function(){
-	var nome = $("#nome").val()
+	var nome = $('#nome').val();
 	var cpf = $("#cpf").val()
 
-	// primeiro tipo de validação
 	if(nome == ""){
-		alert("Por favor digite seu nome")
-		document.getElementById("nome").focus();
-		return;
+		alert("Por favor digite seu nome ")
+		$('#nome').focus();
+		return false;
 	}
 
 	if(cpf == ""){
-		alert("Por favor digite seu cpf")
-		document.getElementById("cpf").focus();
-		return;
+		alert("Por favor digite seu CPF")
+		$("#cpf").focus()
+		return false;
 	}
+
+	return true;
 
 }
 

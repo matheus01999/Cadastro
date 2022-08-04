@@ -1,120 +1,26 @@
-
-
-/* BARRA DE NAVEGAÇÃO */
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover:not(.active) {
-  background-color: #111;
-}
-
-.active {
-  background-color:  rgb(42, 116, 177);
-} 
-
-
-
 /* FORMULARIO DE PESQUISA*/
 
 .formPesquisa{
-  padding: 10;
   margin: 20px;
+  margin-bottom: 0%;
+
 }
 
 .formPesquisa input[type=text]{
-  width: 60%;
+    width: 80%;
     padding: 12px 20px;
     margin: 8px 0;
-    outline: none;
 }
 
-.formPesquisa input[type=text]:hover{
-  border: 3px solid steelblue;
-}
+
 
 .formPesquisa input[type=submit]{
-    width: 20%;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    background-color: #0a8f5e;
-    color: #f2f2f2;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    margin-left: 20px;
-  
-}
+    width: 19%;
+    border-radius: 0%;
+    padding: 14px;
+    margin-left: 11px;
 
-
-/* LISTA DE PESSOAS CADASTRADAS  */
-
-.listaPessoas{
-  padding: 10;
-  margin: 20px;
-}
-
-a {
-  color: #00B7FF;
-}
-
-input[type=text] {
-  width: 60%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
-
-.customers {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.customers td, .customers th {
-  border: 2px solid #ddd;
-  padding: 8px;
-}
-
-.customers tr:nth-child(even){background-color: #f2f2f2;}
-
-.customers tr:hover {background-color: #ddd;}
-
-.customers th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color: rgb(42, 116, 177);
-  color: white;
-}
-.customers a {
-
-  border: 1px;
-  border-radius: 4px;
-  background-color: #0a8f5e;
-  color: #f2f2f2;
-  padding: 8px;
-  float:right;
-  text-decoration: none;
-  
+    
   
 }
 
@@ -123,15 +29,15 @@ input[type=text] {
 .formCadastro{
   padding: 10;
   margin: 20px;
+  border-top-right-radius: 0%;
+  
 }
 
 .formCadastro input[type=submit]{
   width: 20%;
   padding: 14px 20px;
   margin: 8px 0;
-  border: none;
   background-color: #0a8f5e;
-  color: #f2f2f2;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   float: right;
@@ -142,14 +48,40 @@ input[type=text] {
 .formCadastro input[type=text]{
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin:  0;
     outline: none;
 
 
   }
   
   .formCadastro input[type=text]:focus{
-    border: 3px solid steelblue;
+    border: 3px solid #343a40;
   }
+
+
+/* LISTA DE PESSOAS CADASTRADAS  */
+
+.listaPessoas{
+  padding: 10;
+  margin: 20px;
+  margin-top: 10px;
   
+}
+
+
+/* Menu de Botões */
+
+  
+  .menuBotoes{
+    padding: 10;
+    margin: 20px;
+    margin-bottom: 0%;
+
+
+  }
+
+  .menuBotoes a{
+    margin-right: 10px;
+    padding: 7px;
+  }
 
