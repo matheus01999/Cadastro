@@ -20,7 +20,7 @@
 
 	<div class="menuBotoes">
 		<a class="btn btn-outline-dark" href="/">Home</a>
-		<a class="btn btn-outline-dark" href="#" id="cadastrarCliente" data-toggle="modal" data-target="#modalCadastro">Cadastro</a>
+		<a class="btn btn-outline-dark" href="#" data-toggle="modal" data-target="#modalCadastro">Cadastro</a>
 		<a class="btn btn-outline-dark" style="float: right; margin-right: 0%;" href="#" id="ListaPessoas" data-toggle="collapse" data-target="#modalListaPessoas"><img src="/images/search.png" ></a>
 		
 	</div>
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 	<!-- LISTA DE PESSOAS-->
-		<div class="listaPessoas">
+		<div class="listaPessoas" id="modaltabela">
 			<table border="1"  class="table" >
 				<thead class="thead-dark">
 					<tr>
@@ -61,7 +61,7 @@
 						<td><%= pessoas[i].cpf %></td>
 						<td><%= pessoas[i].telefone %></td>
 						<td><%= pessoas[i].endereco %></td>
-						<td style="text-align: center;"><a  href="/alterar?cpf="  class="btn btn-primary">Alterar</a></td>
+						<td style="text-align: center;"><a  href="/alterar?cpf=<%= pessoas[i].cpf %>"  class="btn btn-primary">Alterar</a></td>
 						<td style="text-align: center;"><a href="#" onclick="excluirDados('<%= pessoas[i].cpf %>')" class="btn btn-danger">Excluir</a></td>
 					</tr>	
 				<% } %>
@@ -116,5 +116,38 @@
 	  </div>
 	</div>
   </div>
+
+  <div id="formCadastro" class="formCadastro">
+	<form action="/alterar-pessoa" method="post" onsubmit="return validacao()">
+		<div>
+			<label for="nome">Nome: </label>
+			<input type="text" name="nome" value="<%= usuario.nome %>" id="nome" /> 
+		</div>
+		<div>
+			<label for="sobrenome">Sobrenome:  </label>
+			<input type="text" name="sobrenome"value="<%= usuario.sobrenome %>" id="sobrenome" /> 
+		</div>
+		<div>
+			<label for="cpf">CPF:  </label>
+			<input type="text" name="cpf" value="<%= usuario.cpf %>" id="cpf" /> 
+		</div>
+		<div>
+			<label for="telefone">Telefone:  </label>
+			<input type="text" name="telefone" value="<%= usuario.telefone %>" id="telefone" /> 
+		</div>
+		<div>
+			<label for="endereco">Endereço:  </label>
+			<input type="text" name="endereco" value="<%= usuario.endereco %>" id="endereco" /> 
+		</div>
+		<div class="modal-footer">
+			<button type="button"   class="btn btn-danger" data-dismiss="modal"><a style="text-decoration:none; color: aliceblue;" href="/">Close</a></button>
+			<button type="submit" class="btn btn-primary">Alterar</button>
+		  </div>
+	</form>
+</div>
+
+ 
+
+
   </body>
 </html>

@@ -1,5 +1,5 @@
 const { FORMERR } = require('dns');
-const { json } = require('express');
+const { JSON } = require('express');
 var express = require('express');
 var fs = require('fs');
 const { response } = require('../app');
@@ -17,8 +17,10 @@ router.get('/', function(request, response, next) {
       dados['pessoas'] = []
     }else{
       dados['pessoas'] = JSON.parse(data)
+      
+      
     }
-    response.render('index', dados)
+    response.render('index' ,dados)
   })
 });
 
@@ -41,6 +43,28 @@ router.get('/excluir', function(request, response, next) {
       dados['pessoas'] = novosDados
     }
     response.render('index', dados)
+  })
+});
+
+
+router.get('/alterar', function(request, response, next) {  
+  carregarBase(function read(err, data){
+    if (err) {
+      console.log(err)
+      dados['pessoas'] = []
+    }else{
+      var usuario = null
+      var bancoDados = JSON.parse(data)
+      for(var i=0; i<bancoDados.length; i++){
+        if(bancoDados[i].cpf == request.query.cpf ){
+          usuario = bancoDados[i]
+          break
+        }
+      }
+      response.render('index',  { title: 'teste', 'usuario':usuario})
+
+    }
+
   })
 });
 
