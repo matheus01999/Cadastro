@@ -7,15 +7,9 @@ var Pessoa = require('../modelos/pessoa')
 
 
 router.get('/', function(request, response, next) {  
-  Pessoa.todos(function read(err, data){
-    pessoasCadastradas = []
-    if(err){
-      console.log(err)
-    }
-    else{
-      pessoasCadastradas = JSON.parse(data)
-    }
-    response.render('index', {title:'Pagina 1' , pessoasCadastradas:pessoasCadastradas})
+  Pessoa.todos(function (pessoasCadastradas){
+    response.render('index', {title: "Primeira", pessoasCadastradas:pessoasCadastradas})
+
   })
     
   })
@@ -51,82 +45,30 @@ router.post('/cadastrar-pessoas', function(request, response, next) {
 });
 
 //Rota de exclusão
-router.get('/excluir', function(request, response, next) {  
-  dados = {title: 'Home'}
-  carregarBase(function read(err, data){
-    if (err) {
-      console.log(err)
-      dados['pessoas'] = []
-    }else{
-      var bancoDados = JSON.parse(data)
-      var novosDados = []
-      for(var i=0; i<bancoDados.length; i++){
-        if(bancoDados[i].cpf != request.query.cpf ){
-          novosDados.push(bancoDados[i])
-        }
-      }
-      atualizarBase(novosDados)
-      dados['pessoasCadastradas'] = novosDados
-    }
-    response.render('index', dados)
+router.get('/excluir', function(request, response, next){
+  var pessoa = new Pessoa()
+  pessoa.cpf = request.query.cpf
+  pessoa.excluir(function(pessoasCadastradas){
+    response.render('index', {title: 'exluir', pessoasCadastradas:pessoasCadastradas})
   })
-});
+})
 
 // Rota de Pesquisa
 router.get('/pesquisar', function(request, response, next) {  
-  dados = {title: 'Pesquisar'}
-  carregarBase(function read(err, data){
-    if (err) {
-      console.log(err)
-      bancoDados['pessoas'] = []
-    }else{
-      var dadosPesquisados = []
-      if(request.query.nome == ""){
-        var dadosPesquisados = JSON.parse(data)
-      }
-      else{
-        var bancoDados = JSON.parse(data)
-
-        /* PESQUISA COM REGULAR EXPRE */
-        for(var i=0; i<bancoDados.length; i++){
-          var reg = new RegExp(request.query.nome, 'i')
-          if(bancoDados[i].nome.match(reg) != null){
-            dadosPesquisados.push(bancoDados[i])
-          }
-        }
-
-        /* PESQUISA SEM UTILIZAR REGULAR EXPRESION
-        for(var i=0; i<bancoDados.length; i++){
-          var nomeMinusculo = request.query.nome.toLocaleLowerCase();
-          var nomeBancoMinusculo = bancoDados[i].nome.toLocaleLowerCase();
-          if(nomeBancoMinusculo.indexOf(nomeMinusculo) != -1){
-            dadosPesquisados.push(bancoDados[i])
-          }
-        }
-        */
-      }
-      
-      dados['pessoasCadastradas'] = dadosPesquisados
-    }
-    response.render('index', dados)
+  Pessoa.buscarPorNome(request.query.nome, function(pessoasCadastradas){
+    response.render('index', {title: 'pesquisa', pessoasCadastradas:pessoasCadastradas})
   })
-});
+ });
 
 
 router.get('/alterar', function(request, response, next) {  
-  carregarBase(function read(err, data){
-    if (err) {
-      console.log(err)
+  Pessoa.buscar(request.query.cpf, function (pessoa){
+    if (pessoa == null) {
+      console.log("Erro rota alterar")
+      response.render('alterar',  {'pessoa':{}})
     }else{
-      var usuario = null;
-      var bancoDados = JSON.parse(data)
-      for(var i=0; i<bancoDados.length; i++){
-        if(bancoDados[i].cpf == request.query.cpf ){
-          usuario = bancoDados[i]
-          break
-        }
-      }
-      response.render('alterar',  {'usuario':usuario})
+      
+      response.render('alterar',  {'pessoa':pessoa})
 
     }
 
@@ -134,28 +76,21 @@ router.get('/alterar', function(request, response, next) {
 });
 
 router.post('/alterar-pessoa', function(request, response, next){
-  carregarBase(function read(err, data){
-    if(err){
-      console.log(err)
-      dados['pessoasCadastradas'] = []
-      response.redirect('/')
-    }else{
-      var bancoDados = JSON.parse(data)
-      for(var i=0; i<bancoDados.length; i++){
-        if(bancoDados[i].cpf == request.query.cpfAlterar){
-          bancoDados[i].nome = request.body.nome
-          bancoDados[i].sobrenome = request.body.sobrenome;
-          bancoDados[i].cpf = request.body.cpf;
-          bancoDados[i].telefone = request.body.telefone;
-          bancoDados[i].endereco = request.body.endereco;
+  var pessoa = new Pessoa();
 
-          atualizarBase(bancoDados)
-          break
-        }
-      }
-      response.redirect('/')
-    }
-  })
+  pessoa.cpf        = request.body.cpf
+  pessoa.nome       = request.body.nome
+  pessoa.sobrenome  = request.body.sobrenome
+  pessoa.telefone   = request.body.telefone
+  pessoa.endereco   = request.body.cpf
+
+  pessoa.salvar(function(){
+    response.redirect("/")
+  }, request.query.cpfAlterar)
+
+  
+
+ 
 })
 
 
@@ -183,37 +118,3 @@ var atualizarBase = function(array){
 
 
 module.exports = router;
-
-
-
-
-
-// // Rota de Pesquisa
-// router.get('/pesquisar', function(request, response, next) {  
-//   dados = {title: 'Pesquisar'}
-//   carregarBase(function read(err, data){
-//     if (err) {
-//       console.log(err)
-//       bancoDados['pessoas'] = []
-//     }else{
-//       var dadosPesquisados = []
-//       if(request.query.nome == ""){
-//         var dadosPesquisados = JSON.parse(data)
-//       }
-//       else{
-//         var bancoDados = JSON.parse(data)
-
-//         /* PESQUISA COM REGULAR EXPRE */
-//         for(var i=0; i<bancoDados.length; i++){
-//           var reg = new RegExp(request.query.nome, 'i')
-//           if(bancoDados[i].nome.match(reg) != null){
-//             dadosPesquisados.push(bancoDados[i])
-//           }
-//         }
-//       }
-      
-//       dados['pessoas'] = dadosPesquisados
-//     }
-//     response.render('index', dados)
-//   })
-// });

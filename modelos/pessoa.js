@@ -1,3 +1,4 @@
+const { request } = require('http')
 var App = require('../config/app')
 
 var Pessoa = function(){
@@ -7,28 +8,28 @@ var Pessoa = function(){
     this.telefone =""
     this.endereço = ""
 
-    this.salvar = function(callback){
+    this.salvar = function(callback, cpfAlteracao){
         var nomeI      = this.nome;
         var sobrenomeI = this.sobrenome;
         var cpfI       = this.cpf;
         var telefoneI  = this.telefone;
         var enderecoI  = this.endereço;
 
-        Pessoa.todos(function read(err, data){
-            if(err){
-                console.log(err)
+        Pessoa.todos(function (pessoasCadastradas){
+            if(pessoasCadastradas == []){
+                console.log('Erro function P.todos')
                 callback.call()
             }else{
-                var bancoDados = JSON.parse(data)
-                for(var i=0; i<bancoDados.length; i++){
-                    if(bancoDados[i].cpf == cpfI){
-                        bancoDados[i].npme = nomeI
-                        bancoDados[i].sobrenome = sobrenomeI
-                        bancoDados[i].cpf = cpfI
-                        bancoDados[i].telefone = telefoneI
-                        bancoDados[i].endereço = enderecoI
+                for(var i=0; i<pessoasCadastradas.length; i++){
+                    if(pessoasCadastradas[i].cpf == cpfAlteracao){
 
-                        Pessoa.salvarTodos(bancoDados)
+                        pessoasCadastradas[i].npme = nomeI
+                        pessoasCadastradas[i].sobrenome = sobrenomeI
+                        pessoasCadastradas[i].cpf = cpfI
+                        pessoasCadastradas[i].telefone = telefoneI
+                        pessoasCadastradas[i].endereço = enderecoI
+
+                        Pessoa.salvarTodos(pessoasCadastradas)
                         break
                     }
                 }
@@ -41,22 +42,20 @@ var Pessoa = function(){
 
     this.excluir = function(callback){
         var cpfI = this.cpf
-        Pessoa.todos(function read(err, data){
-            var pessoasCadastradas = []
-            if (err) {
-              console.log(err)
+        Pessoa.todos(function (pessoasCadastradas){
+            if (pessoasCadastradas == []) {
+              console.log('Erro function xcluir')
             }else{
-              var bancoDados = JSON.parse(data)
-              var novosDados = []
-              for(var i=0; i<bancoDados.length; i++){
-                if(bancoDados[i].cpf != cpfI ){
-                  novosDados.push(bancoDados[i])
+              var pessoasRestantes = []
+              for(var i=0; i<pessoasCadastradas.length; i++){
+                if(pessoasCadastradas[i].cpf != cpfI ){
+                  pessoasRestantes.push(pessoasCadastradas[i])
                 }
               }
-              atualizarBase(novosDados)
-              pessoasCadastradas = novosDados
+              Pessoa.salvarTodos(pessoasRestantes)
+              pessoasCadastradas = pessoasRestantes
             }
-            callback.call(pessoasCadastradas)
+            callback.call(null, pessoasCadastradas)
           })
     }
 
@@ -64,39 +63,70 @@ var Pessoa = function(){
 
 
 Pessoa.buscar = function(cpf, callback){
-    Pessoa.todos(function read(err, data){
-        if(err){
-            console.log(err)
-            callback.call(null)
+    Pessoa.todos(function (pessoasCadastradas){
+        if(pessoasCadastradas == []){
+            console.log('Erro function buscar')
+            callback.call()
         }else{
-            var usuario = null
-            var bancoDados = JSON.parse(data)
-            for(var i=0; i<bancoDados.length; i++){
-                if(bancoDados[i].cpf == cpf){
-                    usuario = bancoDados[i];
+            var pessoa = null
+            for(var i=0; i<pessoasCadastradas.length; i++){
+                if(pessoasCadastradas[i].cpf == cpf){
+                    pessoa = pessoasCadastradas[i];
                     break 
                 }
             }
 
-            callback.call(usuario)
+            callback.call(null, pessoa)
 
         }
     })
 }
 
-Pessoa.salvarTodos = function(pessoas, callback){
+Pessoa.buscarPorNome = function(nome, callback){
+    Pessoa.todos(function(pessoasCadastradas){
+        if(pessoasCadastradas == []){
+            console.log("Pessoas não encontradas")
+            callback.call(null, pessoasCadastradas)
+        }
+        else{
+            var dadosPesquisados = []
+            if(nome == ""){
+                dadosPesquisados = pessoasCadastradas
+            }
+            else{
+                for(var i=0; i<pessoasCadastradas.length; i++){
+                    var reg = new RegExp(nome, "i")
+                    if(pessoasCadastradas[i].nome.match(reg) != null){
+                        dadosPesquisados.push(pessoasCadastradas[i])
+                    }
+                }
+
+                callback.call(null, dadosPesquisados)
+            }
+        }
+    })
+}
+
+Pessoa.salvarTodos = function(pessoasCadastradas, callback){
     var fs = require('fs')
-    fs.writeFile(Arquivo, JSON.stringify(pessoasCadastradas), function(err){
+    fs.writeFile(App.Arquivo, JSON.stringify(pessoasCadastradas), function(err){
         if(err){
-            console.log(err)
+            console.log(err, "erro no salvar todos")
         }
     })
 }
 
 Pessoa.todos = function(callback){
-    var fs = require('fs')
-    fs.readFile(App.Arquivo, callback)
+    var fs=require('fs')
+    fs.readFile(App.Arquivo, function(err, data){
+        pessoasCadastradas = []
+        if(err){
+            console.log(err)
+        }else{
+            pessoasCadastradas = JSON.parse(data)
+        }
+
+        callback.call(null, pessoasCadastradas)
+    })
 }
-
-
 module.exports = Pessoa;

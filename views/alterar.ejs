@@ -16,26 +16,26 @@
     <body>
         <div class="formAlteracao">
             <div id="formCadastro" class="formCadastro">
-                <form action="/alterar-pessoa?cpfAlterar" method="post" onsubmit="return validacao()">
+                <form action="/alterar-pessoa?cpfAlterar=<%= pessoa.cpf %>" method="post" onsubmit="return validacao()">
                     <div>
                         <label for="nome">Nome: </label>
-                        <input type="text" name="nome" value="<%= usuario.nome %>" id="nome" /> 
+                        <input type="text" name="nome" value="<%= pessoa.nome %>" id="nome" /> 
                     </div>
                     <div>
                         <label for="sobrenome">Sobrenome:  </label>
-                        <input type="text" name="sobrenome"value="<%= usuario.sobrenome %>" id="sobrenome" /> 
+                        <input type="text" name="sobrenome"value="<%= pessoa.sobrenome %>" id="sobrenome" /> 
                     </div>
                     <div>
                         <label for="cpf">CPF:  </label>
-                        <input type="text" disabled="disabled" name="cpf" value="<%= usuario.cpf %>" id="cpf" /> 
+                        <input type="text"  name="cpf" value="<%= pessoa.cpf %>" id="cpf" /> 
                     </div>
                     <div>
                         <label for="telefone">Telefone:  </label>
-                        <input type="text" name="telefone" value="<%= usuario.telefone %>" id="telefone" /> 
+                        <input type="text" name="telefone" value="<%= pessoa.telefone %>" id="telefone" /> 
                     </div>
                     <div>
                         <label for="endereco">Endereço:  </label>
-                        <input type="text" name="endereco" value="<%= usuario.endereco %>" id="endereco" /> 
+                        <input type="text" name="endereco" value="<%= pessoa.endereco %>" id="endereco" /> 
                     </div>
                     <div class="modal-footer">
                         <button type="button"   class="btn btn-danger" data-dismiss="modal"><a style="text-decoration:none; color: aliceblue;" href="/">Close</a></button>
