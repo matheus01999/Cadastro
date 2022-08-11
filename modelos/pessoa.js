@@ -1,4 +1,3 @@
-const { request } = require('http')
 var App = require('../config/app')
 
 var Pessoa = function(){
@@ -6,127 +5,95 @@ var Pessoa = function(){
     this.sobrenome = ""
     this.cpf = ""
     this.telefone =""
-    this.endereço = ""
+    this.endereco = ""
 
     this.salvar = function(callback, cpfAlteracao){
-        var nomeI      = this.nome;
-        var sobrenomeI = this.sobrenome;
-        var cpfI       = this.cpf;
-        var telefoneI  = this.telefone;
-        var enderecoI  = this.endereço;
+        var query = ""
+        if(cpfAlteracao == undefined){
+            query = "insert into cadast.pessoas(cpf, nome, sobrenome, telefone, endereco)values('" + this.cpf +"','" + this.nome +"','" + this.sobrenome +"','" + this.telefone +"','" + this.endereco +"')"
+        }
+        else{
+            query = "update cadast.pessoas set nome='" + this.nome +"', sobrenome='" + this.sobrenome +"', telefone='" + this.telefone +"', endereco='" + this.endereco +"'"
+        }
 
-        Pessoa.todos(function (pessoasCadastradas){
-            if(pessoasCadastradas == []){
-                console.log('Erro function P.todos')
+        console.log(query)
+
+        App.db.cnn.exec(query, function(dadosRetornadosDaTabela, erro){
+            if(erro){
+                console.log('Erro ao executar a query' + query + ")");
                 callback.call()
             }else{
-                for(var i=0; i<pessoasCadastradas.length; i++){
-                    if(pessoasCadastradas[i].cpf == cpfAlteracao){
-
-                        pessoasCadastradas[i].npme = nomeI
-                        pessoasCadastradas[i].sobrenome = sobrenomeI
-                        pessoasCadastradas[i].cpf = cpfI
-                        pessoasCadastradas[i].telefone = telefoneI
-                        pessoasCadastradas[i].endereço = enderecoI
-
-                        Pessoa.salvarTodos(pessoasCadastradas)
-                        break
-                    }
-                }
-
                 callback.call()
             }
         })
+
+
     }
 
-
     this.excluir = function(callback){
-        var cpfI = this.cpf
-        Pessoa.todos(function (pessoasCadastradas){
-            if (pessoasCadastradas == []) {
-              console.log('Erro function xcluir')
-            }else{
-              var pessoasRestantes = []
-              for(var i=0; i<pessoasCadastradas.length; i++){
-                if(pessoasCadastradas[i].cpf != cpfI ){
-                  pessoasRestantes.push(pessoasCadastradas[i])
-                }
-              }
-              Pessoa.salvarTodos(pessoasRestantes)
-              pessoasCadastradas = pessoasRestantes
-            }
-            callback.call(null, pessoasCadastradas)
-          })
+        var query = "delete from cadast.pessoas where cpf='" + this.cpf + "' ";
+        console.log(query);
+
+        App.db.cnn.exec(query, function(dadosRetornadosDaTabela ,erro) { 
+        if(erro){
+            console.log("Erro ao executar a query (" + query + ")");
+            callback.call();
+        }
+        else{
+            callback.call();
+        }
+        });
     }
 
 }
+
+    
 
 
 Pessoa.buscar = function(cpf, callback){
-    Pessoa.todos(function (pessoasCadastradas){
-        if(pessoasCadastradas == []){
-            console.log('Erro function buscar')
-            callback.call()
+    var query = "SELECT * FROM cadast.pessoas where cpf='" + cpf + "'"
+    App.db.cnn.exec(query, function(dadosRetornadosDaTabela, erro){
+        if(erro){
+            console.log('Erro ao executar a query (' + query + ')')
+            callback.call(null, null)
         }else{
-            var pessoa = null
-            for(var i=0; i<pessoasCadastradas.length; i++){
-                if(pessoasCadastradas[i].cpf == cpf){
-                    pessoa = pessoasCadastradas[i];
-                    break 
-                }
+            if(dadosRetornadosDaTabela.length > 0){
+                callback.call(null, dadosRetornadosDaTabela[0])
+            }else{
+                callback.call(null, null)
             }
-
-            callback.call(null, pessoa)
-
         }
     })
+
 }
 
 Pessoa.buscarPorNome = function(nome, callback){
-    Pessoa.todos(function(pessoasCadastradas){
-        if(pessoasCadastradas == []){
-            console.log("Pessoas não encontradas")
-            callback.call(null, pessoasCadastradas)
-        }
-        else{
-            var dadosPesquisados = []
-            if(nome == ""){
-                dadosPesquisados = pessoasCadastradas
-            }
-            else{
-                for(var i=0; i<pessoasCadastradas.length; i++){
-                    var reg = new RegExp(nome, "i")
-                    if(pessoasCadastradas[i].nome.match(reg) != null){
-                        dadosPesquisados.push(pessoasCadastradas[i])
-                    }
-                }
-
-                callback.call(null, dadosPesquisados)
-            }
+    var query = "SELECT * FROM cadast.pessoas where nome like  '%" + nome + "%'  "
+    App.db.cnn.exec(query, function(dadosRetornadosDaTabela, erro){
+        if(erro){
+            console.log('Erro ao executar a query' + query + ")");
+            callback.call(null, [])
+        }else{
+            callback.call(null, dadosRetornadosDaTabela)
         }
     })
-}
 
-Pessoa.salvarTodos = function(pessoasCadastradas, callback){
-    var fs = require('fs')
-    fs.writeFile(App.Arquivo, JSON.stringify(pessoasCadastradas), function(err){
-        if(err){
-            console.log(err, "erro no salvar todos")
-        }
-    })
 }
+ 
 
 Pessoa.todos = function(callback){
-    var fs=require('fs')
-    fs.readFile(App.Arquivo, function(err, data){
-        pessoasCadastradas = []
-        if(err){
-            console.log(err)
-        }else{
-            pessoasCadastradas = JSON.parse(data)
-        }
 
-        callback.call(null, pessoasCadastradas)
+    var query = "SELECT * FROM cadast.pessoas "
+    App.db.cnn.exec(query, function(dadosRetornadosDaTabela, erro){
+        if(erro){
+            console.log('Erro ao executar a query' + query + ")");
+            callback.call(null, [])
+
+        }else{
+            callback.call(null, dadosRetornadosDaTabela)
+        }
     })
+
 }
+
 module.exports = Pessoa;

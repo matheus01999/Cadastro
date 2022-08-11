@@ -19,37 +19,28 @@ router.get('/', function(request, response, next) {
 // Rota de cadastro
 
 router.post('/cadastrar-pessoas', function(request, response, next) {
-  carregarBase(function read(err, data){
-    if(err){
-      console.log(err)
-      return
-    }
+  var pessoa = new Pessoa();
 
-    pessoasCadastradas = JSON.parse(data)
+  pessoa.cpf        = request.body.cpf
+  pessoa.nome       = request.body.nome
+  pessoa.sobrenome  = request.body.sobrenome
+  pessoa.telefone   = request.body.telefone
+  pessoa.endereco   = request.body.endereco
 
-    hash = {
-      nome: request.body.nome,
-      sobrenome: request.body.sobrenome,
-      cpf: request.body.cpf,
-      telefone: request.body.telefone,
-      endereco: request.body.endereco
-    }
-    
-    salvarBase(hash)
-    response.render('index', { title: 'Finalizado', pessoasCadastradas:pessoasCadastradas });
-
+  pessoa.salvar(function(){
+    response.redirect('/')
+  })
 
   })
 
 
-});
 
 //Rota de exclusão
 router.get('/excluir', function(request, response, next){
-  var pessoa = new Pessoa()
+  var pessoa = new Pessoa();
   pessoa.cpf = request.query.cpf
-  pessoa.excluir(function(pessoasCadastradas){
-    response.render('index', {title: 'exluir', pessoasCadastradas:pessoasCadastradas})
+  pessoa.excluir(function(){
+    response.redirect("/")
   })
 })
 
@@ -82,7 +73,7 @@ router.post('/alterar-pessoa', function(request, response, next){
   pessoa.nome       = request.body.nome
   pessoa.sobrenome  = request.body.sobrenome
   pessoa.telefone   = request.body.telefone
-  pessoa.endereco   = request.body.cpf
+  pessoa.endereco   = request.body.endereco
 
   pessoa.salvar(function(){
     response.redirect("/")
