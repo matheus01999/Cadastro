@@ -1,4 +1,4 @@
-var App = require('../config/app')
+var App = require('../../config/app')
 
 var Pessoa = function(){
     this.nome = ""

@@ -9,8 +9,12 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+// //Authentication
+// var basicAuth = require('basic-auth-connect')
+// app.use(basicAuth('matheus', '60265146'))
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
