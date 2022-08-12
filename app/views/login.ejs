@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/login.css' />
+
+    <script src="/javascripts/login.js" defer></script>
+    </head>
+    <body>
+        <div class="container" id="container">
+            <div class="form-container sign-up-container">
+                <form action="/cadastrar-pessoas" method="post" onsubmit="return validacao()">
+                    <h1>Realizar Cadastro</h1>
+                    <input type="text" id="nome" name="nome" placeholder="Nome" />
+                    <input type="text" id="sobrenome" name="sobrenome" placeholder="Sobrenome" />
+                    <input type="text" id="cpf" name="cpf" placeholder="CPF" />
+                    <input type="text" id="telefone" name="telefone" placeholder="Telefone"/>
+                    <input type="text" id="endereco" name="endereco" placeholder="Endereço"/>
+                    <input type="password" placeholder="Password"/>
+                    <button type="submit">Cadastrar</button>
+                </form>
+            </div>
+            <div class="form-container sign-in-container">
+                <form action="#">
+                    <h1>Login</h1>
+                    <input type="email" placeholder="Email" />
+                    <input type="password" placeholder="Password" />
+                    <a href="#">Forgot your password?</a>
+                    <button>Entrar</button>
+                </form>
+            </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>Seja Bem-Vindo de Volta</h1>
+                        <p>Realize seu login aqui</p>
+                        <button class="ghost" id="signIn">Logar</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1>Ola!, Amigo</h1>
+                        <p>Clique aqui para realizar seu cadastro</p>
+                        <button class="ghost" id="signUp">Cadastrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

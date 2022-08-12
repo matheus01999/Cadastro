@@ -3,6 +3,11 @@ var Pessoa = require('../models/pessoa')
 var homeControllers = {
 
   index: function(request, response, next){
+
+    if(request.cookies == undefined || request.cookies.autenticado == undefined){
+      response.redirect('/login')
+      return;
+    }
     Pessoa.todos(function (pessoasCadastradas){
       response.render('index', {title: "Primeira", pessoasCadastradas:pessoasCadastradas})})
   },
@@ -62,13 +67,14 @@ var homeControllers = {
         pessoa.salvar(function(){
           response.redirect("/")
         }, request.query.cpfAlterar)
-      
-        
-      
-       
       },
 
-      
+      login: function(request, response, next){
+        Pessoa.todos(function (pessoasCadastradas){
+          response.render('login', {title: "Primeira", pessoasCadastradas:pessoasCadastradas})})
+      },
+
+
 }
 
 

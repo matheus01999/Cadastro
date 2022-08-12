@@ -10,6 +10,7 @@ router.get('/excluir', homeControllers.excluir); // ROTA DE EXCLUSÃO
 router.get('/pesquisar', homeControllers.pesquisar); // ROTA DE PESQUISA
 router.get('/alterar', homeControllers.alterar); //ROTA ALTERAR
 router.post('/alterar-pessoa', homeControllers.alterarPessoa); // ROTA DE ALTERAÇÃO DE PESSOA
+router.get('/login', homeControllers.login); // ROTA DE LOGIN
 
 
 
