@@ -6,14 +6,15 @@ var Pessoa = function(){
     this.cpf = ""
     this.telefone =""
     this.endereco = ""
+    this.senha = ""
 
     this.salvar = function(callback, cpfAlteracao){
         var query = ""
         if(cpfAlteracao == undefined){
-            query = "insert into cadast.pessoas(cpf, nome, sobrenome, telefone, endereco)values('" + this.cpf +"','" + this.nome +"','" + this.sobrenome +"','" + this.telefone +"','" + this.endereco +"')"
+            query = "insert into cadast.pessoas(cpf, nome, sobrenome, telefone, endereco,  senha)values('" + this.cpf +"','" + this.nome +"','" + this.sobrenome +"','" + this.telefone +"','" + this.endereco +"','"+ this.senha +"')"
         }
         else{
-            query = "update cadast.pessoas set nome='" + this.nome +"', sobrenome='" + this.sobrenome +"', telefone='" + this.telefone +"', endereco='" + this.endereco +"'"
+            query = "update cadast.pessoas set nome='" + this.nome +"', sobrenome='" + this.sobrenome +"', telefone='" + this.telefone +"', endereco='" + this.endereco +"', senha='"+ this.senha +"'"
         }
 
         console.log(query)
